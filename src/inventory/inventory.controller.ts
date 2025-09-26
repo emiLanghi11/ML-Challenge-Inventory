@@ -1,17 +1,12 @@
 import { Controller, Get, Param } from '@nestjs/common';
-
-export interface InventoryResponse {
-  sku: string;
-  available: number;
-}
+import { InventoryService, InventoryResponse } from './inventory.service';
 
 @Controller('inventory')
 export class InventoryController {
+  constructor(private inventoryService: InventoryService) {}
+
   @Get(':sku')
-  getInventory(@Param('sku') sku: string): InventoryResponse {
-    return {
-      sku,
-      available: Math.floor(Math.random() * 100) + 1,
-    };
+  async getInventory(@Param('sku') sku: string): Promise<InventoryResponse> {
+    return await this.inventoryService.getInventory(sku);
   }
 }
